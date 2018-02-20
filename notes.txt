@@ -1,0 +1,150 @@
+Atomic actions:
+* Move person relative/absolute position
+* Add resource/item to inventory
+* Create building at location (x,y)
+* Make construction progress on structure
+* Drop resource at location (x,y)
+* Remove resource from location (x,y)
+* Remove item from building
+* Wear tool
+* Gain skill
+* Eat/get hungry
+* Sleep/get tired
+* Drop task
+* Pause task?
+* Die
+
+task {
+  MOVE x+1, y+0
+  TICKS 5 - world.terrain[x,y].beaten
+  CONDITION unobstructed(x+1,y)
+  world.terrain[x,y].beaten++
+}
+
+task {
+  REMOVE_RESOURCE world.terrain[x,y].tree
+  CONDITION world.terrain[x,y].tree
+  TICKS 10 - skill.chopping
+  skill.chopping++
+}
+
+task {
+  DROP world.terrain[x,y].logs
+  TICKS 0
+}
+
+task {
+  REMOVE_RESOURCE world.terrain[x,y].logs
+  CONDITION world.terrain[x,y].tree
+  TICKS 0
+}
+
+task {
+  ADD_INVENTORY logs
+  CONDITION sufficient strength
+  TICKS 0
+}
+
+What to do if certain assertions fail? e.g. attempt to gather a resource that
+isn't where it is expected
+
+Conditional tasks:
+ * go get a certain tool if you don't have one
+ * if location (x,y) can be moved to, move to it
+ * if building exists at location (x,y) (should buildings have entrances?)
+
+Conditional completion:
+ * do subtask until some condition is true: rebuild building until fully
+   repaired
+ * practice skill until very skilled
+
+Options:
+ * Get nearest tool or best tool?
+ * Complete either one of two things?
+
+Interruptions: pause task and go eat if you need to (tasks can be flagged as
+interruptible)
+
+Should task nodes contain function pointers that generate the tree?
+
+Moving to location (x,y):
+* Find a path to nearest possible location
+* If not at destination:
+ * Check if path is still unobstructed
+  * If not, update path
+ * Move to next location on path
+
+Clothing
+Food
+Tools
+Resources: lumber, firewood, stone, iron, coal, drinking water
+
+Jobs:
+Harvesting
+Hunting
+Gathering
+Fishing
+Construction
+Mining
+Preaching
+
+Job:
+ Bring quantity q of resource r to building b
+ Spend time t at building b
+ Produce quantity q of good g
+ Store good g in building b
+
+Task:
+ Go to location (x,y) -- or one of ((x1,y1), (x2, y2), ..., (xn, yn))
+ Spend t amount of time at (x,y)
+ Use tool t
+ Remove resource r from location (x,y)
+ Receive quantity q of resources r
+ Go inside building b
+ Receive item i
+ Bring quantity q of resource r to location (x,y)
+ Change property p by quantity q
+
+How many people can share a given task?
+e.g. maybe only one person can gather a reasource unit, but multiple can harvest a field
+
+Reproduction
+People
+ Location
+ Age
+ Sex
+ Job type
+ Task
+ Skills
+ Clothing
+ Inventory
+ Hunger
+ Tired
+ Health
+ Temperature
+ Strength
+ Loyalty
+Tasks
+ Type: construct, gather, attack
+ Priority
+ Location
+ Requirements
+ Progress
+Buildings
+ Location
+ Dimensions
+ Occupancy
+Resources
+ Type
+ Quantity
+ Location
+ Harvest time
+Terrain
+Battle
+
+Functions:
+ Update
+ Render
+ Assign tasks to people
+ Assign homes to people
+
